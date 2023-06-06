@@ -4,20 +4,32 @@ from django.db import models
 # Create your models here.
 class History(models.Model):
     zabbix_id = models.IntegerField('Номер в забиксе')
-    zabbix_value_cur = models.CharField('Текущее значение параметра',default='',max_length=150)
-    zabbix_value_avg_week = models.CharField('Среднее значение параметра за неделю',default='',max_length=150)
-    zabbix_value_avg_month = models.CharField('Среднее значение параметра за месяц',default='',max_length=150)
-    zabbix_value_avg_year = models.CharField('Среднее значение параметра за год',default='',max_length=150)
-    zabbix_value_deviation_day = models.CharField('Отклонеие параметра от вчерашнего',default='',max_length=150)
-    zabbix_value_deviation_week = models.CharField('Отклонеие параметра от недельного',default='',max_length=150)
-    zabbix_value_deviation_month = models.CharField('Отклонеие параметра от месячного',default='',max_length=150)
-    zabbix_value_deviation_year = models.CharField('Отклонеие параметра от годового',default='',max_length=150)
-    zabbix_value_trend = models.ImageField('Тренд',default='',max_length=150)
-    title = models.CharField('Описание параметра',default='',max_length=150)
+    dt_zap = models.DateField('Дата записи', null=True)
+    zabbix_value_name_host = models.CharField('Имя хоста',default='',max_length=50, null=True)
+    zabbix_value_cur = models.CharField('Текущее значение параметра',default='',max_length=150, null=True)
+    zabbix_value_avg_dey = models.CharField('Среднее значение параметра за день', default='', max_length=150,null=True)
+    zabbix_value_avg_week = models.CharField('Среднее значение параметра за неделю',default='',max_length=150, null=True)
+    zabbix_value_avg_month = models.CharField('Среднее значение параметра за месяц',default='',max_length=150, null=True)
+    zabbix_value_avg_year = models.CharField('Среднее значение параметра за год',default='',max_length=150, null=True)
+    zabbix_value_deviation_day = models.CharField('Отклонеие параметра от вчерашнего',default='',max_length=150, null=True)
+    zabbix_value_deviation_week = models.CharField('Отклонеие параметра от недельного',default='',max_length=150, null=True)
+    zabbix_value_deviation_month = models.CharField('Отклонеие параметра от месячного',default='',max_length=150, null=True)
+    zabbix_value_deviation_year = models.CharField('Отклонеие параметра от годового',default='',max_length=150, null=True)
+    zabbix_value_trend = models.ImageField('Тренд',default='',max_length=150, null=True)
+    title = models.CharField('Описание параметра',default='',max_length=150, null=True)
 
     def __str__(self):
         return self.title
 
+
+class approle_parametrs(models.Model):
+    approle = models.ForeignKey('Roles_sp', on_delete=models.PROTECT, null=False)
+    name_parametr = models.CharField('Наименование параметра',default='',max_length=150, null=False)
+
+    def __str__(self):
+        return self.name_parametr
+    class Meta:
+        verbose_name = 'Параметры ролей'
 
 class Trcking_tags(models.Model):
     infrastructure_tag = models.ForeignKey('Infrastructure_sp', on_delete= models.PROTECT, null=True)

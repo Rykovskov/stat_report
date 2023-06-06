@@ -1,8 +1,10 @@
 <!-- extend from base layout -->
+
 {% extends "main/bases.html" %}
 {% block title %}
     Статистика использования ресурсов
 {% endblock %}
+{% load humanize %}
 {% block content %}
     <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
         <div class="fixed-top bg-primary bg-white">
@@ -77,5 +79,49 @@
             </div>
         </form>
     </header>
+    <body>
+        <div class="container-fluid">
+            {% for h in host_sp %}
+               <div class="row">
+                   <div class="col-1">
+                       <h5>{{ h.hostid }}</h5>
+                   </div>
+                   <div class="col-1">
+                       <h5>{{ h.name }}</h5>
+                   </div>
+                   <div class="col-4">
+                       {% for p in history_table %}
+                              {% if p.zabbix_value_name_host == h.name %}
+                                  <div class="submit-row">
+                                  <table class="table">
+                                      <thead>
+                                      <tr>
+                                          <td rowspan="2">Параметр</td>
+                                          <td colspan="4" align="center">Средние показатели</td>
+                                      </tr>
+                                      <tr>
+                                              <td>День</td>
+                                              <td>Неделя</td>
+                                              <td>Месяц</td>
+                                              <td>Год</td>
+                                      </tr>
+                                      </thead>
+                                      <tr>
+                                          <td>{{p.title}}</td>
+                                          <td>{{ p.zabbix_value_avg_dey|floatformat:2 }}</td>
+                                          <td>{{ p.zabbix_value_avg_week|floatformat:2 }}</td>
+                                          <td>{{ p.zabbix_value_avg_month|floatformat:2 }}</td>
+                                          <td>{{ p.zabbix_value_avg_year|floatformat:2|intcomma }}</td>
+                                      </tr>
+                                  </table>
+
+                                  </div>
+                              {% endif %}
+                           {% endfor %}
+                   </div>
+               </div>
+            {% endfor %}
+        </div>
+    </body>
 
 {% endblock %}
